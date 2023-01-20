@@ -29,23 +29,7 @@ jobs:
         with:
           no_color: true
           soft_fail: true
-        script: |
-            const output = `#### Terraform Tfsec 🤖\`${{ steps.tfsec.outcome }}\'
-            <details><summary>Tfsec Output</summary>
-
-            \`\`\`\n
-            ${{process.env.TFSEC}}
-            \`\`\`
-
-            </details>
-            *Pusher: @${{ github.actor }}, Action: \`${{ github.event_name }}\`, Working Directory: \`${{ env.tf_actions_working_dir }}\`, Workflow: \`${{ github.workflow }}\`*`;
-            github.rest.issues.createComment({
-              issue_number: context.issue.number,
-              owner: context.repo.owner,
-              repo: context.repo.repo,
-              body: output
-            })
-
+          
       - name: Check out code
         uses: actions/checkout@v2
 
@@ -112,4 +96,11 @@ jobs:
 #   id: apply
 #   continue-on-error: true
 #   run: |
-#     terraform -chdir="terraform/hbits-prod-infra/v1/hbits-core-infra-module/" apply -lock=false -auto-approve
+# #     terraform -chdir="terraform/hbits-prod-infra/v1/hbits-core-infra-module/" apply -lock=false -auto-approve
+#             <details><summary>Tfsec Output</summary>
+
+#             \`\`\`\n
+#             ${{process.env.TFSEC}}
+#             \`\`\`
+
+#             </details>
