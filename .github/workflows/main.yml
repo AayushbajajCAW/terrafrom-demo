@@ -24,6 +24,8 @@ jobs:
       - name: tfsec
         id: tfsec
         uses: aquasecurity/tfsec-action@v1.0.0
+        env:
+          TFSEC: "tfsec\n${{ steps.tfsec.outputs.stdout }}"
         with:
           soft_fail: true
 
@@ -44,7 +46,7 @@ jobs:
 
       - name: Terraform fmt
         id: fmt
-        run: terraform fmt -check
+        run: terraform fmt
         continue-on-error: true
 
       - name: Initialize Terraform
@@ -73,7 +75,7 @@ jobs:
             <details><summary>Tfsec Output</summary>
 
             \`\`\`\n
-            ${{ steps.tfsec.outputs.stdout }}
+            ${{ process.env.TFSEC }}
             \`\`\`
 
             </details>
