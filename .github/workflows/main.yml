@@ -22,10 +22,9 @@ jobs:
         uses: actions/checkout@master
         
       - name: tfsec
-        uses: aquasecurity/tfsec-pr-commenter-action@v1.2.0
+        uses: aquasecurity/tfsec-action@v1.0.0
         with:
-          tfsec_args: --soft-fail
-          github_token: ${{ secrets.TOKEN_GITHUB }}
+          soft_fail: true
 
       - name: Check out code
         uses: actions/checkout@v2
@@ -54,9 +53,46 @@ jobs:
         continue-on-error: true
         run: |
           terraform plan
-      # - name: Apply Terraform
-      #   if: steps.plan.outcome == 'success'
-      #   id: apply
-      #   continue-on-error: true
-      #   run: |
-      #     terraform -chdir="terraform/hbits-prod-infra/v1/hbits-core-infra-module/" apply -lock=false -auto-approve
+          
+      - uses: actions/github-script@v6
+        if: github.event_name == 'pull_request'
+        env:
+          PLAN: "terraform\n${{ steps.plan.outputs.stdout }}"
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          script: |
+            const output = `#### Terraform Format and Style 🖌\`${{ steps.fmt.outcome }}\`
+            #### Terraform Initialization ⚙️\`${{ steps.init.outcome }}\`
+            #### Terraform Validation 🤖\`${{ steps.validate.outcome }}\`
+            <details><summary>Validation Output</summary>
+
+            \`\`\`\n
+            ${{ steps.validate.outputs.stdout }}
+            \`\`\`
+
+            </details>
+
+            #### Terraform Plan 📖\`${{ steps.plan.outcome }}\`
+
+            <details><summary>Show Plan</summary>
+
+            \`\`\`\n
+            ${process.env.PLAN}
+            \`\`\`
+
+            </details>
+
+            *Pusher: @${{ github.actor }}, Action: \`${{ github.event_name }}\`, Working Directory: \`${{ env.tf_actions_working_dir }}\`, Workflow: \`${{ github.workflow }}\`*`;
+
+            github.rest.issues.createComment({
+              issue_number: context.issue.number,
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              body: output
+            })
+# - name: Apply Terraform
+#   if: steps.plan.outcome == 'success'
+#   id: apply
+#   continue-on-error: true
+#   run: |
+#     terraform -chdir="terraform/hbits-prod-infra/v1/hbits-core-infra-module/" apply -lock=false -auto-approve
