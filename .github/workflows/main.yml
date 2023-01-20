@@ -24,7 +24,6 @@ jobs:
       - name: tfsec
         uses: aquasecurity/tfsec-pr-commenter-action@main
         with:
-          working_directory: ''
           tfsec_args: --soft-fail
           github_token: ${{ secrets.TOKEN_GITHUB }}
 
