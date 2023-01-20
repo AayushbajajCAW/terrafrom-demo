@@ -22,7 +22,7 @@ jobs:
         uses: actions/checkout@master
         
       - name: tfsec
-        uses: aquasecurity/tfsec-pr-commenter-action@v1.5.0
+        uses: aquasecurity/tfsec-pr-commenter-action@v1.2.0
         with:
           tfsec_args: --soft-fail
           github_token: ${{ secrets.TOKEN_GITHUB }}
