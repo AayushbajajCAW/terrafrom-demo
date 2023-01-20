@@ -24,9 +24,8 @@ jobs:
       - name: tfsec
         id: tfsec
         uses: aquasecurity/tfsec-action@v1.0.0
-        with:
-          format: sarif
-          soft_fail: false
+        # with:
+        #   soft_fail: false
           
       - name: Check out code
         uses: actions/checkout@v2
@@ -70,13 +69,7 @@ jobs:
             const output = `#### Terraform Tfsec 🤖\`${{ steps.tfsec.outcome }}\'
             #### Terraform Format and Style 🖌\`${{ steps.fmt.outcome }}\`
             #### Terraform Initialization ⚙️\`${{ steps.init.outcome }}\`
-            <details><summary>Tfsec Output</summary>
 
-            \`\`\`\n
-            ${{ steps.tfsec.outputs.stdout }}
-            \`\`\`
-
-            </details>
             #### Terraform Plan 📖\`${{ steps.plan.outcome }}\`
 
             <details><summary>Show Plan</summary>
@@ -101,3 +94,11 @@ jobs:
 #   continue-on-error: true
 #   run: |
 # #     terraform -chdir="terraform/hbits-prod-infra/v1/hbits-core-infra-module/" apply -lock=false -auto-approve
+
+#            <details><summary>Tfsec Output</summary>
+
+            # \`\`\`\n
+            # ${{ steps.tfsec.outputs.stdout }}
+            # \`\`\`
+
+#            </details>
