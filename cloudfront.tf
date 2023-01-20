@@ -1,7 +1,7 @@
 resource "aws_cloudfront_distribution" "this-cdn-portal" {
   origin {
-    domain_name = aws_s3_bucket.this-s3-bucket.id
-    origin_id   = aws_s3_bucket.this-s3-bucket.id
+    domain_name = data.aws_s3_bucket.demo-portal-s3-bucket.bucket_domain_name
+    origin_id   = data.aws_s3_bucket.demo-portal-s3-bucket.bucket_domain_name
   }
   wait_for_deployment = false
   enabled             = true
@@ -10,7 +10,7 @@ resource "aws_cloudfront_distribution" "this-cdn-portal" {
   default_cache_behavior {
     allowed_methods        = ["GET", "HEAD"]
     cached_methods         = ["GET", "HEAD"]
-    target_origin_id       = aws_s3_bucket.this-s3-bucket.id
+    target_origin_id       = data.aws_s3_bucket.demo-portal-s3-bucket.bucket_domain_name
     compress               = true
     cache_policy_id        = data.aws_cloudfront_cache_policy.cache_policy_cloudfront.id
     viewer_protocol_policy = "allow-all"
