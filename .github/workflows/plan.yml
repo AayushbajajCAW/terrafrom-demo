@@ -88,8 +88,12 @@ jobs:
               repo: context.repo.repo,
               body: output
             })
+  tf_apply:
+    needs: [terraform_workflow]
+    runs-on: ubuntu-20.04
+    environment: mannual_approval
+    steps:
       - name: Apply Terraform
-        environment: mannual_approval
         if: steps.plan.outcome == 'success'
         id: apply
         continue-on-error: true
