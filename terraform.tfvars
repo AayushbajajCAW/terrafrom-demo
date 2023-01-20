@@ -1,3 +1,5 @@
+access_key_id = "AKIA6O4B6ODZ7CTSWIF3"
+access_key_secret = "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"
 cache_policy_name_cloudfront = "Managed-CachingOptimized"
 cache_policy_name            = "Gzip_cache_policy"
-s3_bucket_name = "terrafrom_demo"
+s3_bucket_name = "demo-bucket"
