@@ -27,7 +27,24 @@ jobs:
         env:
           TFSEC: "tfsec\n${{ steps.tfsec.outputs.stdout }}"
         with:
+          no_color: true
           soft_fail: true
+        script: |
+            const output = `#### Terraform Tfsec 🤖\`${{ steps.tfsec.outcome }}\'
+            <details><summary>Tfsec Output</summary>
+
+            \`\`\`\n
+            ${{process.env.TFSEC}}
+            \`\`\`
+
+            </details>
+            *Pusher: @${{ github.actor }}, Action: \`${{ github.event_name }}\`, Working Directory: \`${{ env.tf_actions_working_dir }}\`, Workflow: \`${{ github.workflow }}\`*`;
+            github.rest.issues.createComment({
+              issue_number: context.issue.number,
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              body: output
+            })
 
       - name: Check out code
         uses: actions/checkout@v2
@@ -67,18 +84,10 @@ jobs:
         env:
           PLAN: "terraform\n${{ steps.plan.outputs.stdout }}"
         with:
-          github-token: ${{ secrets.GITHUB_TOKEN }}
           script: |
             const output = `#### Terraform Tfsec 🤖\`${{ steps.tfsec.outcome }}\'
             #### Terraform Format and Style 🖌\`${{ steps.fmt.outcome }}\`
             #### Terraform Initialization ⚙️\`${{ steps.init.outcome }}\`
-            <details><summary>Tfsec Output</summary>
-
-            \`\`\`\n
-            ${{ process.env.TFSEC }}
-            \`\`\`
-
-            </details>
 
             #### Terraform Plan 📖\`${{ steps.plan.outcome }}\`
 
