@@ -88,17 +88,10 @@ jobs:
               repo: context.repo.repo,
               body: output
             })
-# - name: Apply Terraform
-#   if: steps.plan.outcome == 'success'
-#   id: apply
-#   continue-on-error: true
-#   run: |
-# #     terraform -chdir="terraform/hbits-prod-infra/v1/hbits-core-infra-module/" apply -lock=false -auto-approve
-
-#            <details><summary>Tfsec Output</summary>
-
-            # \`\`\`\n
-            # ${{ steps.tfsec.outputs.stdout }}
-            # \`\`\`
-
-#            </details>
+      - name: Apply Terraform
+        environment: mannual_approval
+        if: steps.plan.outcome == 'success'
+        id: apply
+        continue-on-error: true
+        run: |
+          terraform -auto-approve
