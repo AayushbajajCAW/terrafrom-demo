@@ -24,8 +24,8 @@ jobs:
       - name: tfsec
         id: tfsec
         uses: aquasecurity/tfsec-action@v1.0.0
-        # with:
-        #   soft_fail: false
+        with:
+          soft_fail: true
           
       - name: Check out code
         uses: actions/checkout@v2
