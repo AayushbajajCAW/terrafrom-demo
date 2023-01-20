@@ -22,6 +22,7 @@ jobs:
         uses: actions/checkout@master
         
       - name: tfsec
+        id: tfsec
         uses: aquasecurity/tfsec-action@v1.0.0
         with:
           soft_fail: true
@@ -41,6 +42,11 @@ jobs:
           aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
 
+      - name: Terraform fmt
+          id: fmt
+          run: terraform fmt -check
+          continue-on-error: true
+
       - name: Initialize Terraform
         id: init
         run: |
@@ -52,8 +58,8 @@ jobs:
         id: plan
         continue-on-error: true
         run: |
-          terraform plan
-          
+          terraform plan -no-color
+
       - uses: actions/github-script@v6
         if: github.event_name == 'pull_request'
         env:
@@ -61,13 +67,13 @@ jobs:
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
           script: |
-            const output = `#### Terraform Format and Style 🖌\`${{ steps.fmt.outcome }}\`
+            const output = `#### Terraform Tfsec 🤖\`${{ steps.tfsec.outcome }}\'
+            #### Terraform Format and Style 🖌\`${{ steps.fmt.outcome }}\`
             #### Terraform Initialization ⚙️\`${{ steps.init.outcome }}\`
-            #### Terraform Validation 🤖\`${{ steps.validate.outcome }}\`
-            <details><summary>Validation Output</summary>
+            <details><summary>Tfsec Output</summary>
 
             \`\`\`\n
-            ${{ steps.validate.outputs.stdout }}
+            ${{ steps.tfsec.outputs.stdout }}
             \`\`\`
 
             </details>
