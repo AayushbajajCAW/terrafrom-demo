@@ -7,6 +7,16 @@ resource "aws_s3_bucket" "this-s3-bucket" {
     security-accessibility = "Private"
   }
 }
+resource "aws_s3_bucket" "this-s32-bucket" {
+  bucket        = "${local.parent_org_name}-${local.cloud_provider}-${local.region}-${local.environment}-s3-${var.s3_bucket_name}"
+  force_destroy = true
+  tags = {
+    app-role               = "s3 Bucket"
+    app-name               = "${var.s3_bucket_name}-S3-Bucket"
+    security-accessibility = "Private"
+  }
+}
+
 
 resource "aws_s3_bucket_website_configuration" "this-s3-website-configuration" {
   bucket   = "${local.parent_org_name}-${local.cloud_provider}-${local.region}-${local.environment}-s3-${local.project}-${var.s3_bucket_name}"
