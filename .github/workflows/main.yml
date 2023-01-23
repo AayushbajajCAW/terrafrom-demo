@@ -129,4 +129,4 @@ jobs:
         id: apply
         continue-on-error: true
         run: |
-          terraform -auto-approve
+          terraform apply -auto-approve
