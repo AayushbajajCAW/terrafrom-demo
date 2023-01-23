@@ -92,6 +92,10 @@ jobs:
     needs: [terraform_workflow]
     runs-on: ubuntu-20.04
     environment: mannual_approval
+    env:
+      GITHUB_TOKEN: ${{ secrets.TOKEN_GITHUB }}
+      TF_VAR_access_key_id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+      TF_VAR_access_key_secret: ${{ secrets.AWS_SECRET_ACCESS_KEY}}
     steps:
       - name: Check out code
         uses: actions/checkout@v2
