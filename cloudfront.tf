@@ -24,6 +24,7 @@ resource "aws_cloudfront_distribution" "this-cdn-portal" {
       restriction_type = "none"
     }
   }
+  
   tags = {
     app-role               = "Cloudfront distribution for s3"
     app-name               = "portal-cloudfront"
