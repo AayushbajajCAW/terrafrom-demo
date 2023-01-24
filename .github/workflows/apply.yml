@@ -1,4 +1,4 @@
-name: Plan using Terraform
+name: Apply using Terraform 
 on:
   push:
     branches:
@@ -39,7 +39,7 @@ jobs:
         continue-on-error: false
         run: |
           terraform plan -no-color  
-          
+
       - name: Apply Terraform
         if: steps.plan.outcome == 'success'
         id: apply
