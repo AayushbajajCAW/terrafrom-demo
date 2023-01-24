@@ -56,12 +56,13 @@ jobs:
         id: plan
         continue-on-error: true
         run: |
-          terraform plan -no-color && terraform show -no-color -json output.tfplan > output.json
+          terraform plan -no-color -out tfplan
       - name: Setup Infracost
         uses: infracost/actions/setup@v2
         with:
           api-key: ${{ secrets.INFRACOST_API_KEY }}
-
+      - name : Show Terrafrom to Json
+        run: terraform show -json tfplan > tfplan.json
       # Checkout the base branch of the pull request (e.g. main/master).
       - name: Checkout base branch
         uses: actions/checkout@v3
