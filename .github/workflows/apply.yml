@@ -45,4 +45,4 @@ jobs:
         id: apply
         continue-on-error: true
         run: |
-          terraform destroy -auto-approve
+          terraform apply -auto-approve
