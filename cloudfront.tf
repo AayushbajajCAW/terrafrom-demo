@@ -29,6 +29,7 @@ resource "aws_cloudfront_distribution" "this-cdn-portal" {
     app-role               = "Cloudfront distribution for s3"
     app-name               = "portal-cloudfront"
     security-accessibility = "Public"
+    environment 	   = "demo"
   }
   depends_on = [
     aws_s3_bucket.this-s3-bucket,
