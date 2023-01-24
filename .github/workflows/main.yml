@@ -57,7 +57,8 @@ jobs:
           infracost comment github --path=/tmp/infracost.json \
                                    --repo=$GITHUB_REPOSITORY \
                                    --github-token=${{github.token}} \
-                                   --pull-request=${{github.event.p
+                                     --pull-request=${{github.event.pull_request.number}} \
+                                     --behavior=update
       - name: Check out code
         uses: actions/checkout@v2
 
