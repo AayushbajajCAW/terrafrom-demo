@@ -7,7 +7,6 @@ resource "aws_s3_bucket" "this-s3-bucket" {
     security-accessibility = "Private"
   }
 }
-
 resource "aws_s3_bucket_website_configuration" "this-s3-website-configuration" {
   bucket   = "${local.parent_org_name}-${local.cloud_provider}-${local.region}-${local.environment}-s3-${local.project}-${var.s3_bucket_name}"
   index_document {
