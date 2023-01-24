@@ -56,13 +56,16 @@ jobs:
         id: plan
         continue-on-error: true
         run: |
-          terraform plan -no-color -out tfplan
+          terraform plan -no-color -out tfplan.binary
+
+      - name : Show Terrafrom to Json
+        run: terraform show -json tfplan.binary > tfplan.json
+
       - name: Setup Infracost
         uses: infracost/actions/setup@v2
         with:
           api-key: ${{ secrets.INFRACOST_API_KEY }}
-      - name : Show Terrafrom to Json
-        run: terraform show -json tfplan > tfplan.json
+
       # Checkout the base branch of the pull request (e.g. main/master).
       - name: Checkout base branch
         uses: actions/checkout@v3
@@ -72,7 +75,7 @@ jobs:
       # Generate Infracost JSON file as the baseline.
       - name: Generate Infracost cost estimate baseline
         run: |
-          infracost breakdown --path=${TF_ROOT} \
+          infracost breakdown --path=tfplan.json \
                               --format=json \
                               --out-file=/tmp/infracost-base.json
 
@@ -83,7 +86,7 @@ jobs:
       # Generate an Infracost diff and save it to a JSON file.
       - name: Generate Infracost diff
         run: |
-          infracost diff --path=${TF_ROOT}
+          infracost diff --path=tfplan.json \
                               --format=json \
                               --compare-to=/tmp/infracost-base.json \
                               --out-file=/tmp/infracost.json
@@ -92,9 +95,9 @@ jobs:
         run: |
           infracost comment github --path=/tmp/infracost.json \
                                    --repo=$GITHUB_REPOSITORY \
-                                   --github-token=${{github.token}} \
-                                     --pull-request=${{github.event.pull_request.number}} \
-                                     --behavior=update
+                                   --github-token=${{ secrets.TOKEN_GITHUB }} \
+                                   --pull-request=${{github.event.pull_request.number}} \
+                                   --behavior=update
 
       - uses: actions/github-script@v6
         if: github.event_name == 'pull_request'
