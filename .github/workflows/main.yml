@@ -9,7 +9,7 @@ jobs:
       TF_VAR_access_key_id: ${{ secrets.AWS_ACCESS_KEY_ID }}
       TF_VAR_access_key_secret: ${{ secrets.AWS_SECRET_ACCESS_KEY}}
       TF_IN_AUTOMATION: true
-      TF_ROOT: /terrafrom-demo
+      TF_ROOT: /
     runs-on: ubuntu-20.04
     permissions:
       contents: read
