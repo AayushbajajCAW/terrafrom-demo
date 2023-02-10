@@ -15,6 +15,7 @@ resource "aws_cloudfront_distribution" "this-cdn-portal" {
     cache_policy_id        = data.aws_cloudfront_cache_policy.cache_policy_cloudfront.id
     viewer_protocol_policy = "allow-all"
   }
+  web_acl_id = aws_wafv2_web_acl.this-waf-web-acl.arn
   price_class = "PriceClass_All"
   viewer_certificate {
     cloudfront_default_certificate = true
